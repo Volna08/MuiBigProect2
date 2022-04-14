@@ -3,7 +3,7 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import Typography from '@mui/material/Typography';
-import { Avatar, CardActionArea, Fab, Grid, IconButton, MenuItem, SvgIcon } from "@mui/material";
+import { Avatar, Button, CardActionArea, CardMedia, Fab, Grid, IconButton, MenuItem, SvgIcon } from "@mui/material";
 import { Divider } from "@mui/material";
 import Stack from '@mui/material/Stack';
 import "./styles.css"
@@ -11,7 +11,8 @@ import dayjs, { Dayjs } from "dayjs";
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import { DeleteOutline, Favorite} from "@mui/icons-material";
 import cn from 'classnames'
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+
 
 function stringToColor(string) {
   let hash = 0;
@@ -38,52 +39,52 @@ function stringToColor(string) {
 // }
 
 
-export const Post = ({
+export const Product = ({
   onPostLike,
   likes, _id, currentUser, image, tags, title, text,
   // author: {name, email, avatar }, 
   author,
   created_at,
-  onPostDelete
+ 
 }) => {
 
   const dataFormated = dayjs(created_at).format('M/D/YYYY')
-  const isLiked = likes.some(id => id === currentUser._id)
+  const isLiked = likes?.some(id => id === currentUser._id)
+const navigate = useNavigate()
 
   function handleLikeClick() {
     onPostLike({ _id, likes })
     console.log({ _id, likes })
   }
 
+ function  handleBackClick() {
+  navigate(-1);
+}
+ 
+ 
 
-  function handleDeletePost () {
-     onPostDelete({_id});
-    console.log({ _id })
-  }
 
   return (
-    <Grid container item xs={6} sm={4} md={3}>
-      <Card className="mainCard" sx={{ maxWidth: 365, margin: 2 }}>
+   <div>
+      <Card className="mainCard" sx={{ maxWidth: 665, margin: 2 }}>
         {/* бордер не работает */}
-        <Link to ={`/post/${_id}`}>
-        <CardActions className="iconLike">
+        {/* <CardActions className="iconLike">
           <IconButton aria-label="add to favorites" onClick={handleLikeClick}>
             {/* <FavoriteBorderIcon size="small" 
             sx={{ color: "red" }}
               className={cn('favorite-icon', { 'favorite-icon_active': isLiked })}
             /> */}
-            {isLiked
+             {/* {isLiked
               ? <Favorite sx={{ color: "blue" }} />
-              // <FavoriteBorderIcon sx={{ color: "red" }} />
-              : <FavoriteBorderIcon />}
+               : <FavoriteBorderIcon />}
             {isLiked
               ? <Typography variant="body2" sx={{ color: "blue" }} >{likes?.length}</Typography>
               : <Typography variant="body2" color="text.secondary">{likes?.length}</Typography>}
-            {/* <Typography variant="body2" color="text.secondary">{likes?.length}</Typography> */}
+            <Typography variant="body2" color="text.secondary">{likes?.length}</Typography>
           </IconButton>
-        </CardActions>
+        </CardActions> */} 
 
-
+<img src={image} className="imageRout" />
 
 
         <CardContent>
@@ -98,7 +99,7 @@ export const Post = ({
 
 
         <CardContent>
-          <Stack display='flex' direction="row" spacing={2}>
+          <Stack display='flex' direction="row" spacing={4}>
             <Typography variant="h6" component="span">
               {/* <Avatar {...stringAvatar(author?.name)} /> */}
               <Avatar src={author?.avatar && author?.avatar} aria-label="recipe">
@@ -121,14 +122,15 @@ export const Post = ({
           <div className="item">Tags:  </div>
           <div className="itemLine">{tags}</div>
         </div>
-        <MenuItem className = "iconDel">
-          <DeleteOutline sx={{ color: "blue" }}   onClick={ handleDeletePost }/>
-         
-        </MenuItem>
-        </Link>
+
+        <Divider />
+      <CardActions>
+               <Button size="small" onClick={handleBackClick}>Назад</Button>
+      </CardActions>
+
       </Card>
       
-        </Grid>
-
+ 
+      </div>
   )
 }

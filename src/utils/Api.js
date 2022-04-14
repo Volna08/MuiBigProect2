@@ -17,6 +17,13 @@ getProductsList(){
 }).then(onResponce)
 }
 
+getProductByID(ID_POST){
+    return fetch(`${this._baseUrl}/posts/${ID_POST}`, {
+    headers: {
+        authorization: this._token,
+    }
+}).then(onResponce)
+}
 
 getUserInfo(){
     return fetch(`${this._baseUrl}/users/me`, {

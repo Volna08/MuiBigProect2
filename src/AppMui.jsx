@@ -7,7 +7,9 @@ import { postData } from "./posts"
 import { Divider } from "@mui/material";
 import { Footer } from "./Footer/index.jsx";
 import api from "./utils/Api"
-import { PostsList } from "./PostsList/index"
+import { PageCatalog } from "./pages/CatalogPage/CatalogPage.jsx";
+import { PageProduct } from "./pages/ProductPage/ProductPage.jsx";
+import { Route, Routes } from "react-router-dom";
 
 export const AppMui = () => {
   const [posts, setPost] = useState([])
@@ -15,13 +17,13 @@ export const AppMui = () => {
 
   useEffect(() => {
 
-    api.getProductsList()
-      .then(data => console.log(data))
-      .catch(err => console.log(err))
+    // api.getProductsList()
+    //   .then(data => console.log(data))
+    //   .catch(err => console.log(err))
 
-    api.getUserInfo()
-      .then(data => console.log(data))
-      .catch(err => console.log(err))
+    // api.getUserInfo()
+    //   .then(data => console.log(data))
+    //   .catch(err => console.log(err))
 
     Promise.all([api.getProductsList(), api.getUserInfo()])
       .then(([postData, userData]) => {
@@ -59,11 +61,26 @@ export const AppMui = () => {
       <AppHeader user={currentUser} />
       <Divider />
       <Container>
-        <PostsList postData={posts}
-          onPostLike={handlePostLike}
-          onPostDelete={handleDeletePost}
-          currentUser={currentUser} />
-      </Container> /
+        <Routes>
+          <Route path='/' element = {
+            <PageCatalog 
+        currentUser = {currentUser} 
+        posts= {posts}
+        handlePostLike = {handlePostLike} 
+        handleDeletePost = {handleDeletePost}/>
+          }/>
+        <Route path='/post/:postID' element = {
+          <PageProduct 
+        currentUser = {currentUser} 
+        handlePostLike = {handlePostLike}
+        />
+        }/>
+        
+        <Route path='*' element = {<h1>Страница не найдена</h1>}/>
+        
+        </Routes>
+                
+      </Container> 
       <Footer />
     </>
   )
